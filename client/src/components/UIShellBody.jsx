@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import SimpleList from "../pattern-components/SimpleList";
 import ShoppingList from "./ShoppingList";
-import BasicPage from "../pattern-components/BasicPage";
+import Catalog from "./Catalog";
 import "../pattern-components/patterns.scss";
 
 class UIShellBody extends Component {
   components = {
     "Simple List": SimpleList,
-    "Basic Page": BasicPage,
+    "Catalog List": Catalog,
     "Shopping List": ShoppingList
   };
   defaultComponent = "Shopping List";
