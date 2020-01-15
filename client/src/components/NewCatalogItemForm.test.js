@@ -1,11 +1,26 @@
 import React from 'react';
-import ShoppingList from './ShoppingList';
+import 'jest';
+import NewCatalogItemForm from './NewCatalogItemForm';
 import {
-    render
+    render,fireEvent, wait
   } from '@testing-library/react';
 
 describe('Shopping list', ()=>{
-    test('That shopping list will display item "banana" if passed an item array including "banana"', (done)=>{
+    test('That user can add an item to the catalog', (done)=>{
+        const items = [];
+        let addedItem={};
+        const addCatalogItem = (item)=>{
+            addedItem = item;
+        }
+        const {getByTestId} = render(<NewCatalogItemForm catalogItems={items} addCatalogItem={addCatalogItem}/>)
+        const addCatalogItemButton = getByTestId('add-catalog-item-button');
+        const nameInput = getByTestId('input-name');
+        fireEvent.change(nameInput,{target:{value:"orange juice"}})
+        fireEvent.click(addCatalogItemButton, {button:0});
+        expect(addedItem).toEqual({name:'orange juice', 'size/weight':"", comment:""})
+        wait(done, {timeout:1000})
+    })
+    test('That the user cannot add a duplicate item', (done)=>{
         const items = [
             {name:"banana"},
             {name:"apples"},
@@ -13,9 +28,16 @@ describe('Shopping list', ()=>{
             {name:"almonds"},
             {name:"lays potato chips"}
         ];
-        const {queryAllByTestId} = render(<ShoppingList items={items}/>)
-        const shoppingListItems = queryAllByTestId('shopping-list-item')
-        expect(shoppingListItems.length).toEqual(5)
-        done()
+        let addedItem={};
+        const addCatalogItem = (item)=>{
+            addedItem = item;
+        }
+        const {getByTestId} = render(<NewCatalogItemForm catalogItems={items} addCatalogItem={addCatalogItem}/>)
+        const addCatalogItemButton = getByTestId('add-catalog-item-button');
+        const nameInput = getByTestId('input-name');
+        fireEvent.change(nameInput,{target:{value:"apples"}})
+        fireEvent.click(addCatalogItemButton, {button:0});
+        expect(addedItem).toEqual({})
+        wait(done, {timeout:1000})
     })
 })

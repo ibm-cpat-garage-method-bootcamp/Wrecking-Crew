@@ -6,52 +6,76 @@ import NewCatalogItemForm from "./NewCatalogItemForm";
 import "../pattern-components/patterns.scss";
 
 class UIShellBody extends Component {
+  constructor(props){
+    super(props);
+    const defaultCatalogItems = [
+      {
+        name:'banana',
+        'size/weight':'large',
+        quantity:7,
+        comment:"RIPE PLEASE"
+      },
+    ];
+    const defaultShoppingListItems = [
+      {
+        name:'banana',
+        'size/weight':'large',
+        quantity:7,
+        comment:"RIPE PLEASE"
+      },
+      {
+        name:'apple',
+        'size/weight':'large',
+        quantity:7,
+        comment:"RIPE PLEASE"
+      },
+      {
+        name:'chips',
+        'size/weight':'large',
+        quantity:7,
+        comment:"RIPE PLEASE"
+      },
+      {
+        name:'soda',
+        'size/weight':'large',
+        quantity:7,
+        comment:"RIPE PLEASE"
+      },
+      {
+        name:'chocolate',
+        'size/weight':'large',
+        quantity:7,
+        comment:"RIPE PLEASE"
+      },
+    ];
+    this.state ={
+      catalogItems:defaultCatalogItems,
+      shoppingListItems:defaultShoppingListItems
+    }; 
+  }
   components = {
     "Simple List": SimpleList,
     "Catalog List": Catalog,
     "Shopping List": ShoppingList,
     "New Catalog Item Form":NewCatalogItemForm
   };
-  defaultComponent = "New Catalog Item Form";
-  shoppingListItems = [
-    {
-      name:'banana',
-      'size/weight':'large',
-      quantity:7,
-      comment:"RIPE PLEASE"
-    },
-    {
-      name:'apple',
-      'size/weight':'large',
-      quantity:7,
-      comment:"RIPE PLEASE"
-    },
-    {
-      name:'chips',
-      'size/weight':'large',
-      quantity:7,
-      comment:"RIPE PLEASE"
-    },
-    {
-      name:'soda',
-      'size/weight':'large',
-      quantity:7,
-      comment:"RIPE PLEASE"
-    },
-    {
-      name:'chocolate',
-      'size/weight':'large',
-      quantity:7,
-      comment:"RIPE PLEASE"
-    },
-  ];
+  defaultComponent = "Catalog List";
+
+  addCatalogItem = (item) => {
+    this.setState({catalogItems:[...this.state.catalogItems, item]})
+    console.log('New item submitted successfully!', item)
+  }
 
   render() {
     let curScreen = this.defaultComponent;
     const PatternName = this.components[curScreen];
     return (
       <div className="pattern-container">
-        <PatternName showDescription={true} items={this.shoppingListItems}/>
+        <PatternName 
+          showDescription={true}
+          shoppingListItems={this.state.shoppingListItems} 
+          catalogItems={this.state.catalogItems} 
+          addCatalogItem={this.addCatalogItem}/>
       </div>
     );
   }

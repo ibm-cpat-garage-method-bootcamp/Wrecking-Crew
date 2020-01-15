@@ -12,17 +12,24 @@ import "../pattern-components/patterns.scss";
 let checkFlag = true;
 
 function UpdateForm (props) {
+  const {catalogItems, addCatalogItem} = props;
   const fields = [
     "name",
     "size/weight",
-    "comment",
-    "quantity"
+    "comment"
   ];
-    const defaultItem = fields.reduce((obj, field)=>({
-      ...obj, 
-      [field]:''
-    }),{dataToSave:{}})
-    const [newItem, setNewItem] = React.useState(defaultItem)
+  const requiredFields = ["name"];
+
+  const defaultItem = fields.reduce((obj, field)=>({
+    ...obj, 
+    [field]:''
+  }),{})
+
+  const isFieldInvalid = (field, fieldValue)=>{
+    return !fieldValue && requiredFields.includes(field)
+  }
+
+  const [newItem, setNewItem] = React.useState(defaultItem)
 
   const saveData = event => {
     const target = event.target;
@@ -32,7 +39,7 @@ function UpdateForm (props) {
           {
             ...prev, 
             [fieldName]: fieldValue, 
-            [fieldName + "Invalid"]: !fieldValue 
+            [fieldName + "Invalid"]: isFieldInvalid(fieldName, fieldValue) 
           }
         )
       );
@@ -41,7 +48,7 @@ function UpdateForm (props) {
   const checkForm = () => {
     checkFlag = true;
     for(const field of fields){
-      if (!newItem[field]) {
+      if (isFieldInvalid(field, newItem[field])) {
         const fieldInvalid = `${field}Invalid`;
         setNewItem((prev)=>({...prev, [fieldInvalid]: true }));
         checkFlag = false;
@@ -53,11 +60,17 @@ function UpdateForm (props) {
   const saveForm = event => {
     event.preventDefault();
     if (checkForm()) {
-      const dataToSave = fields.reduce((obj, field)=>({
+      const itemToAdd = fields.reduce((obj, field)=>({
         ...obj,
         [field]:newItem[field]
       }), {})
-      setNewItem((prev)=>({...prev, dataToSave }));
+      const duplicateItem = !!catalogItems.find(catalogItem=>catalogItem.name.toLowerCase()===itemToAdd.name.toLowerCase())
+      if(duplicateItem){
+      console.log(`Item ${itemToAdd.name} already exists`);
+      return;
+    }
+      setNewItem(defaultItem);
+      addCatalogItem(itemToAdd);
     }
   };
 
@@ -80,12 +93,13 @@ function UpdateForm (props) {
                     maxLength="100"
                     invalid={newItem[`${field}Invalid`]}
                     invalidText={`Please enter a ${field}..`}
+                    data-testid={`input-${field}`}
                   />
                 ))}
                 <br />
                 <br />
                 <div className="left-align">
-                  <Button onClick={saveForm}>Update</Button>
+                  <Button onClick={saveForm} data-testid="add-catalog-item-button">Add</Button>
                 </div>
               </Form>
             </Tile>
@@ -93,27 +107,6 @@ function UpdateForm (props) {
         </div>
         <br />
         <br />
-        {Object.keys(newItem.dataToSave).length > 0 && (
-          <div className="bx--row">
-            <div className="bx--col-xs-12 left-align">
-              <Tile>
-                {Object.keys(newItem.dataToSave).map(item => (
-                  <p key={item}>
-                    &nbsp;&nbsp;
-                    <strong>
-                      {item.charAt(0).toUpperCase() +
-                        item.slice(1).replace(/([A-Z])/g, " $1")}
-                      :
-                    </strong>{" "}
-                    {newItem.dataToSave[item]}
-                  </p>
-                ))}
-              </Tile>
-              <br />
-              <br />
-            </div>
-          </div>
-        )}
       </div>
     );
 }

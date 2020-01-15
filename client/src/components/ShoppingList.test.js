@@ -13,7 +13,7 @@ describe('Shopping list', ()=>{
             {name:"almonds"},
             {name:"lays potato chips"}
         ];
-        const {queryAllByTestId} = render(<ShoppingList items={items}/>)
+        const {queryAllByTestId} = render(<ShoppingList shoppingListItems={items}/>)
         const shoppingListItems = queryAllByTestId('shopping-list-item')
         expect(shoppingListItems.length).toEqual(5)
         done()

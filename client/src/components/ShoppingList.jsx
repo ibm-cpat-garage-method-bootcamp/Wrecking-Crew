@@ -11,7 +11,7 @@ import "../pattern-components/patterns.scss";
 import * as _ from 'lodash';
 
 function ShoppingList(props) {
-  const sortedItemsFromProps = props.items && _.sortBy(props.items, 'name');
+  const sortedItemsFromProps = props.shoppingListItems && _.sortBy(props.shoppingListItems, 'name');
   const [items, setItems] = React.useState(sortedItemsFromProps || []);
     
   const columns =['name', 'size/weight','quantity','comment'];

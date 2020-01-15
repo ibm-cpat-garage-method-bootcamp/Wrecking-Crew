@@ -17,7 +17,7 @@ class Catalog extends Component {
         super(props);
         this.state = {
             selectedRow: 0,
-            items: props.items
+            items: props.catalogItems
         };
     }
 
