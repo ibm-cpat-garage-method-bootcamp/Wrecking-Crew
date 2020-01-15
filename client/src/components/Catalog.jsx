@@ -9,10 +9,10 @@ import {
     Icon
 } from "carbon-components-react";
 import { iconCheckmarkSolid } from "carbon-icons";
-import Header from "./Header";
-import "./patterns.scss";
+import Header from "../pattern-components/Header";
+import "../pattern-components/patterns.scss";
 
-class SimpleList extends Component {
+class Catalog extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -43,34 +43,54 @@ class SimpleList extends Component {
                         />
                     </StructuredListCell>
                 </div>
-
                 <StructuredListCell className="simple-list-row">
-                    {row}
+                    {row.name}
                 </StructuredListCell>
+                <StructuredListCell className="simple-list-row">
+                    {row.comment}
+                </StructuredListCell>
+                <StructuredListCell/>
             </StructuredListRow>
         );
     };
 
     render() {
-        const data = ["row1", "row2", "row3"];
+        let data = [
+            {name: 'Bananas', comment: 'Love these!'},
+            {name: 'Nutella', comment: 'Changed my life'},
+            {name: 'Cookies', comment: 'Megan loves these'},
+            {name: 'Ñesquik', comment: 'Gotta have my chocolate milk'},
+            {name: 'Apple', comment: 'An apple a day...'}].sort((a, b)=>{
+                let item1 = a.name;
+                let item2 = b.name;
+
+                if (item1 < item2) {
+                    return -1
+                }
+                if (item1 > item2){
+                    return 1
+                }
+                return 0;
+
+        });
         return (
             <div className="bx--grid pattern-container">
                 <Header
-                    title="Simple List"
-                    subtitle="This pattern will display an array of model objects in a simple list column list."
+                    title="Catalog"
+                    subtitle="Please add items to your favorite items to your catalog"
                 />
                 <div className="bx--row">
                     <div className="bx--col-xs-12">
                         <StructuredListWrapper selection border>
-                            <StructuredListHead>
-                                <StructuredListRow head>
-                                    <StructuredListCell head />
-                                    <StructuredListCell head>
-                                        Simple List Title
-                                    </StructuredListCell>
-                                </StructuredListRow>
-                            </StructuredListHead>
-
+                            <StructuredListRow head>
+                                <StructuredListCell head />
+                                <StructuredListCell head>
+                                    Item
+                                </StructuredListCell>
+                                <StructuredListCell head>
+                                    Comments
+                                </StructuredListCell>
+                            </StructuredListRow>
                             <StructuredListBody>
                                 {data.map((row, i) => {
                                     return this.renderRow(row, i);
@@ -84,4 +104,4 @@ class SimpleList extends Component {
     }
 }
 
-export default SimpleList;
+export default Catalog;
