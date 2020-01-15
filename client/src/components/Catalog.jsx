@@ -6,7 +6,8 @@ import {
     StructuredListHead,
     StructuredListBody,
     StructuredListInput,
-    Icon
+    Icon,
+    Toggle
 } from "carbon-components-react";
 import { iconCheckmarkSolid } from "carbon-icons";
 import Header from "../pattern-components/Header";
@@ -35,15 +36,11 @@ class Catalog extends Component {
                         title="row-0"
                         name="row-0"
                         //defaultChecked={this.state.selectedRow === id}
-                        //checked={this.state.selectedRow === id}
+                        checked={row.outOfStock}
                     />
-                    {/*Can used for later development */}
-                    {/*<StructuredListCell>*/}
-                    {/*    <Icon*/}
-                    {/*        className="bx--structured-list-svg"*/}
-                    {/*        icon={iconCheckmarkSolid}*/}
-                    {/*    />*/}
-                    {/*</StructuredListCell>*/}
+                    <StructuredListCell>
+                        <Toggle data-testid='catalog-list-item-out' toggled={row.outOfStock}/>
+                    </StructuredListCell>
                 </div>
                 <StructuredListCell className="simple-list-row">
                     {row.name}
