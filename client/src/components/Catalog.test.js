@@ -2,7 +2,6 @@ import React from 'react';
 import Catalog from "./Catalog";
 
 import { render } from '@testing-library/react'
-import ShoppingList from "./ShoppingList";
 
 describe('CatalogList', ()=>{
 
@@ -15,7 +14,7 @@ describe('CatalogList', ()=>{
             {name: 'Banana', comment: 'delicious', 'size/weight': 'Large'},
             {name: 'Banana', comment: 'delicious', 'size/weight': 'Large'}]
 
-        const {queryAllByTestId} = render(<Catalog items={items}/>)
+        const {queryAllByTestId} = render(<Catalog catalogItems={items}/>)
         const catalogListItems = queryAllByTestId('catalog-list-item')
         expect(catalogListItems.length).toEqual(6)
     })

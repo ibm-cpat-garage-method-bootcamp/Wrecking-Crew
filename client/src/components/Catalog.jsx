@@ -17,7 +17,7 @@ class Catalog extends Component {
         super(props);
         this.state = {
             selectedRow: 0,
-            items: props.catalogItems
+            catalogItems: props.catalogItems
         };
     }
 
@@ -60,7 +60,7 @@ class Catalog extends Component {
     };
 
     render() {
-        let data = this.state.items.sort((a, b)=>{
+        let data = this.state.catalogItems.sort((a, b)=>{
                 let item1 = a.name;
                 let item2 = b.name;
 

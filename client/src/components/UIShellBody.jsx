@@ -74,7 +74,7 @@ class UIShellBody extends Component {
         <PatternName 
           showDescription={true}
           shoppingListItems={this.state.shoppingListItems} 
-          catalogItems={this.state.catalogItems} 
+          catalogItems={this.state.catalogItems}
           addCatalogItem={this.addCatalogItem}/>
       </div>
     );
