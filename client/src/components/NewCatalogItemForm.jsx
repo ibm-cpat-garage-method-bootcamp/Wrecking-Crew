@@ -14,15 +14,24 @@ let checkFlag = true;
 function UpdateForm (props) {
   const {catalogItems, addCatalogItem} = props;
   const fields = [
-    "name",
-    "size/weight",
-    "comment"
+    {
+      name:"name",
+      type:"text"
+    },
+    {
+      name:"size/weight",
+      type:"text"
+    },
+   {
+     name:"comment",
+     type:"text"
+    }
   ];
   const requiredFields = ["name"];
 
   const defaultItem = fields.reduce((obj, field)=>({
     ...obj, 
-    [field]:''
+    [field.name]:''
   }),{})
 
   const isFieldInvalid = (field, fieldValue)=>{
@@ -48,8 +57,8 @@ function UpdateForm (props) {
   const checkForm = () => {
     checkFlag = true;
     for(const field of fields){
-      if (isFieldInvalid(field, newItem[field])) {
-        const fieldInvalid = `${field}Invalid`;
+      if (isFieldInvalid(field.name, newItem[field.name])) {
+        const fieldInvalid = `${field.name}Invalid`;
         setNewItem((prev)=>({...prev, [fieldInvalid]: true }));
         checkFlag = false;
       }
@@ -62,7 +71,7 @@ function UpdateForm (props) {
     if (checkForm()) {
       const itemToAdd = fields.reduce((obj, field)=>({
         ...obj,
-        [field]:newItem[field]
+        [field.name]:newItem[field.name]
       }), {})
       const duplicateItem = !!catalogItems.find(catalogItem=>catalogItem.name.toLowerCase()===itemToAdd.name.toLowerCase())
       if(duplicateItem){
@@ -84,17 +93,18 @@ function UpdateForm (props) {
             <Tile>
               <Form>
                 {fields.map(field=>(
+                  field.type==="text"?
                   <TextInput
-                    id={field}
-                    name={field}
-                    value={newItem[field] || ""}
+                    id={field.name}
+                    name={field.name}
+                    value={newItem[field.name] || ""}
                     onChange={saveData}
-                    labelText={field}
+                    labelText={field.name}
                     maxLength="100"
-                    invalid={newItem[`${field}Invalid`]}
-                    invalidText={`Please enter a ${field}..`}
-                    data-testid={`input-${field}`}
-                  />
+                    invalid={newItem[`${field.name}Invalid`]}
+                    invalidText={`Please enter a ${field.name}..`}
+                    data-testid={`input-${field.name}`}
+                  />:null
                 ))}
                 <br />
                 <br />

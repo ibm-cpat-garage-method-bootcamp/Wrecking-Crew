@@ -32,19 +32,17 @@ const Fade20 = () => (
 );
 
 class UIShell extends Component {
-  header = "Menu Header";
-  menuTitle = "Menu Title";
-  menuItems = ["Simple List", "Item Two", "Item Three"];
+  menuItems = ["Shopping List", "Catalog", "New Catalog Item Form"];
 
   constructor(props) {
     super(props);
     this.state = {
-      patternName: this.menuItems[0]
+      currentList: this.menuItems[0]
     };
   }
 
   onPatternSelection = label => {
-    this.setState({ patternName: label });
+    this.setState({ currentList: label });
   };
 
   renderSideNavItems = () => {
@@ -55,7 +53,7 @@ class UIShell extends Component {
     return (
       <SideNavMenuItem
         href="# "
-        isActive={label === this.state.patternName ? true : false}
+        isActive={label === this.state.currentList ? true : false}
         onClick={e => this.onPatternSelection(label)}
       >
         {label}
@@ -74,17 +72,11 @@ class UIShell extends Component {
         </Header>
         <SideNav aria-label="Side navigation">
           <SideNavItems>
-            <SideNavMenu
-              defaultExpanded
-              icon={<Fade20 />}
-              title={this.menuTitle}
-            >
               {this.renderSideNavItems()}
-            </SideNavMenu>
           </SideNavItems>
         </SideNav>
         <Content id="main-content">
-          <UIShellBody patternName={this.state.patternName} />
+          <UIShellBody currentList={this.state.currentList} />
         </Content>
       </div>
     );
