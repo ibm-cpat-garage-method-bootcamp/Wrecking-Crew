@@ -34,14 +34,15 @@ class Catalog extends Component {
                         title="row-0"
                         name="row-0"
                         //defaultChecked={this.state.selectedRow === id}
-                        checked={this.state.selectedRow === id}
+                        //checked={this.state.selectedRow === id}
                     />
-                    <StructuredListCell>
-                        <Icon
-                            className="bx--structured-list-svg"
-                            icon={iconCheckmarkSolid}
-                        />
-                    </StructuredListCell>
+                    {/*Can used for later development */}
+                    {/*<StructuredListCell>*/}
+                    {/*    <Icon*/}
+                    {/*        className="bx--structured-list-svg"*/}
+                    {/*        icon={iconCheckmarkSolid}*/}
+                    {/*    />*/}
+                    {/*</StructuredListCell>*/}
                 </div>
                 <StructuredListCell className="simple-list-row">
                     {row.name}
@@ -60,7 +61,9 @@ class Catalog extends Component {
             {name: 'Nutella', comment: 'Changed my life'},
             {name: 'Cookies', comment: 'Megan loves these'},
             {name: 'Ñesquik', comment: 'Gotta have my chocolate milk'},
-            {name: 'Apple', comment: 'An apple a day...'}].sort((a, b)=>{
+            {name: 'Apple', comment: 'An apple a day...'}
+
+            ].sort((a, b)=>{
                 let item1 = a.name;
                 let item2 = b.name;
 
