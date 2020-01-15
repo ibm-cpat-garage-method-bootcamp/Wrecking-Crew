@@ -16,7 +16,8 @@ class Catalog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedRow: 0
+            selectedRow: 0,
+            items: props.items
         };
     }
 
@@ -26,7 +27,7 @@ class Catalog extends Component {
 
     renderRow = (row, id) => {
         return (
-            <StructuredListRow key={id} onClick={() => this.onRowClick(id)}>
+            <StructuredListRow data-testid='catalog-list-item' key={id} onClick={() => this.onRowClick(id)}>
                 <div>
                     <StructuredListInput
                         id={`row-${id}`}
@@ -50,20 +51,16 @@ class Catalog extends Component {
                 <StructuredListCell className="simple-list-row">
                     {row.comment}
                 </StructuredListCell>
+                <StructuredListCell className="simple-list-row">
+                    {row['size/weight']}
+                </StructuredListCell>
                 <StructuredListCell/>
             </StructuredListRow>
         );
     };
 
     render() {
-        let data = [
-            {name: 'Bananas', comment: 'Love these!'},
-            {name: 'Nutella', comment: 'Changed my life'},
-            {name: 'Cookies', comment: 'Megan loves these'},
-            {name: 'Ñesquik', comment: 'Gotta have my chocolate milk'},
-            {name: 'Apple', comment: 'An apple a day...'}
-
-            ].sort((a, b)=>{
+        let data = this.state.items.sort((a, b)=>{
                 let item1 = a.name;
                 let item2 = b.name;
 
@@ -92,6 +89,9 @@ class Catalog extends Component {
                                 </StructuredListCell>
                                 <StructuredListCell head>
                                     Comments
+                                </StructuredListCell>
+                                <StructuredListCell head>
+                                    Size
                                 </StructuredListCell>
                             </StructuredListRow>
                             <StructuredListBody>

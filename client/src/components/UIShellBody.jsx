@@ -10,7 +10,7 @@ class UIShellBody extends Component {
     "Catalog List": Catalog,
     "Shopping List": ShoppingList
   };
-  defaultComponent = "Shopping List";
+  defaultComponent = "Catalog List";
   shoppingListItems = [
     {
       name:'banana',
