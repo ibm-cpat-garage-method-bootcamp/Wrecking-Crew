@@ -10,6 +10,10 @@ import {
   SideNavMenuItem
 } from "carbon-components-react/lib/components/UIShell/";
 import UIShellBody from "./UIShellBody";
+import SimpleList from "../pattern-components/SimpleList";
+import Catalog from "./Catalog";
+import ShoppingList from "./ShoppingList";
+import NewCatalogItemForm from "./NewCatalogItemForm";
 
 const Fade20 = () => (
   <svg
@@ -32,17 +36,20 @@ const Fade20 = () => (
 );
 
 class UIShell extends Component {
-  menuItems = ["Shopping List", "Catalog", "New Catalog Item Form"];
+  header = "Menu Header";
+  menuTitle = "Menu Title";
+  menuItems = ["Catalog List", "Shopping List"];
 
   constructor(props) {
     super(props);
     this.state = {
-      currentList: this.menuItems[0]
+      patternName: this.menuItems[0]
     };
   }
 
   onPatternSelection = label => {
-    this.setState({ currentList: label });
+    this.setState({ patternName: label });
+    console.log(label)
   };
 
   renderSideNavItems = () => {
@@ -53,7 +60,7 @@ class UIShell extends Component {
     return (
       <SideNavMenuItem
         href="# "
-        isActive={label === this.state.currentList ? true : false}
+        isActive={label === this.state.patternName ? true : false}
         onClick={e => this.onPatternSelection(label)}
       >
         {label}
@@ -72,11 +79,17 @@ class UIShell extends Component {
         </Header>
         <SideNav aria-label="Side navigation">
           <SideNavItems>
+            <SideNavMenu
+              defaultExpanded
+              icon={<Fade20 />}
+              title={this.menuTitle}
+            >
               {this.renderSideNavItems()}
+            </SideNavMenu>
           </SideNavItems>
         </SideNav>
         <Content id="main-content">
-          <UIShellBody currentList={this.state.currentList} />
+          <UIShellBody patternName={this.state.patternName} />
         </Content>
       </div>
     );
