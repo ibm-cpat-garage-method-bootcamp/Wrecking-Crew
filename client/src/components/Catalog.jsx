@@ -9,6 +9,46 @@ import {
 } from "carbon-components-react";
 import Header from "../pattern-components/Header";
 import "../pattern-components/patterns.scss";
+import Modal from '@material-ui/core/Modal';
+import { Popover, Table, TableBody, TableRow, TableCell, TableHead } from "@material-ui/core";
+
+function ExpandedViewModal(props){
+    const {expandedEl, expandedElObj,closeExpandedView} = props;
+    React.useEffect(()=>{
+        console.log(expandedElObj)
+    },[expandedEl])
+    return <Popover 
+            open={!!expandedEl}
+            onClose={closeExpandedView}
+            anchorEl={expandedEl}
+            >
+          <div id="simple-modal-description" style={{width:'400px', height:'400px'}}>
+            <Table>
+                <TableHead>
+                    <TableCell>
+                            <h4>Store</h4>
+                    </TableCell>
+                    <TableCell>
+                        <h4>Aisle</h4>
+                    </TableCell> 
+                </TableHead>
+                <TableBody>
+                    {expandedElObj 
+                    && expandedElObj['store/aisle'] 
+                    && expandedElObj['store/aisle'].map((storeAislePair)=>
+                    <TableRow>
+                        <TableCell>
+                            {storeAislePair.store}
+                        </TableCell>
+                        <TableCell>
+                            {storeAislePair.aisle}
+                        </TableCell>
+                    </TableRow>)}
+                </TableBody>
+            </Table>
+          </div>
+    </Popover>
+}
 
 class Catalog extends Component {
     constructor(props) {
@@ -27,7 +67,9 @@ class Catalog extends Component {
         });
 
         this.state = {
-            catalogItems: sortedCatalogItems
+            catalogItems: sortedCatalogItems,
+            expandedEl: '',
+            expandedElObj:null
         }
     }
 
@@ -42,7 +84,7 @@ class Catalog extends Component {
 
     renderRow = (row, id) => {
         return (
-            <StructuredListRow data-testid='catalog-list-item' key={row.id}>
+            <StructuredListRow data-testid='catalog-list-item' key={row.id} onClick={(e)=>this.openExpandedItem(e.target, id)}>
                 <div>
                     <StructuredListInput
                         id={`row-${row.id}`}
@@ -70,6 +112,11 @@ class Catalog extends Component {
         );
     };
 
+    openExpandedItem = (expandedEl, expandedElId)=>{
+        const expandedElObj = this.state.catalogItems[expandedElId];
+        this.setState({expandedEl, expandedElObj})
+    }
+
     render() {
         return (
             <div className="bx--grid pattern-container">
@@ -79,8 +126,8 @@ class Catalog extends Component {
                 />
                 <div className="bx--row">
                     <div className="bx--col-xs-12">
-                        <StructuredListWrapper selection border>
-                            <StructuredListRow head>
+                        <StructuredListWrapper selection border >
+                            <StructuredListRow head >
                                 <StructuredListCell head />
                                 <StructuredListCell head>
                                     Item
@@ -99,6 +146,11 @@ class Catalog extends Component {
                             </StructuredListBody>
                         </StructuredListWrapper>
                     </div>
+                    <ExpandedViewModal 
+                        expandedEl={this.state.expandedEl} 
+                        expandedElObj={this.state.expandedElObj} 
+                        closeExpandedView={()=>this.setState({expandedEl:'', expandedElObj:null})}
+                    />
                 </div>
             </div>
         );
