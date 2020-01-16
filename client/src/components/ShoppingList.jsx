@@ -9,10 +9,16 @@ import {
 import Header from "../pattern-components/Header";
 import "../pattern-components/patterns.scss";
 import * as _ from 'lodash';
+import { getShoppingListItems } from "../util/api";
 
 function ShoppingList(props) {
-  const sortedItemsFromProps = props.shoppingListItems && _.sortBy(props.shoppingListItems, 'name');
-  const [items, setItems] = React.useState(sortedItemsFromProps || []);
+  const [items, setItems] = React.useState([]);
+
+  React.useEffect(()=>{
+      getShoppingListItems().then(shoppingListItems=>{
+        setItems(shoppingListItems)
+      })
+  },[])
     
   const columns =['name', 'size/weight','quantity','comment'];
 

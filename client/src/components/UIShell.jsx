@@ -14,6 +14,7 @@ import SimpleList from "../pattern-components/SimpleList";
 import Catalog from "./Catalog";
 import ShoppingList from "./ShoppingList";
 import NewCatalogItemForm from "./NewCatalogItemForm";
+import {BrowserRouter as Router, Link} from 'react-router-dom';
 
 const Fade20 = () => (
   <svg
@@ -39,6 +40,11 @@ class UIShell extends Component {
   header = "Menu Header";
   menuTitle = "Menu Title";
   menuItems = ["Catalog", "Shopping List", "New Catalog Item Form"];
+  menuRoutes={
+    "Catalog":'catalog',
+    "Shopping List":'shopping-list', 
+    "New Catalog Item Form":'new-catalog-item'
+  };
 
   constructor(props) {
     super(props);
@@ -49,7 +55,7 @@ class UIShell extends Component {
 
   onPatternSelection = label => {
     this.setState({ patternName: label });
-    console.log(label)
+
   };
 
   renderSideNavItems = () => {
@@ -58,18 +64,21 @@ class UIShell extends Component {
 
   renderSideNavItem = label => {
     return (
-      <SideNavMenuItem
-        href="# "
-        isActive={label === this.state.patternName ? true : false}
-        onClick={e => this.onPatternSelection(label)}
-      >
-        {label}
-      </SideNavMenuItem>
+      <Link to={this.menuRoutes[label]} style={{textDecoration:'none'}}>
+        <SideNavMenuItem
+          isActive={window.location.pathname === `/${this.menuRoutes[label]}` ? true : false}
+          onClick={e => this.onPatternSelection(label)}
+        >
+          {label}
+        </SideNavMenuItem>
+      </Link>
+      
     );
   };
 
   render() {
     return (
+      <Router>
       <div>
         <Header aria-label="IBM Platform Name">
           <SkipToContent />
@@ -83,9 +92,10 @@ class UIShell extends Component {
           </SideNavItems>
         </SideNav>
         <Content id="main-content">
-          <UIShellBody currentList={this.state.patternName} />
+          <UIShellBody/>
         </Content>
       </div>
+      </Router>
     );
   }
 }
