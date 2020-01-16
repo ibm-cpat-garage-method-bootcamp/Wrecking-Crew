@@ -10,6 +10,10 @@ import {
   SideNavMenuItem
 } from "carbon-components-react/lib/components/UIShell/";
 import UIShellBody from "./UIShellBody";
+import SimpleList from "../pattern-components/SimpleList";
+import Catalog from "./Catalog";
+import ShoppingList from "./ShoppingList";
+import NewCatalogItemForm from "./NewCatalogItemForm";
 
 const Fade20 = () => (
   <svg
@@ -34,7 +38,7 @@ const Fade20 = () => (
 class UIShell extends Component {
   header = "Menu Header";
   menuTitle = "Menu Title";
-  menuItems = ["Simple List", "Item Two", "Item Three"];
+  menuItems = ["Catalog List", "Shopping List"];
 
   constructor(props) {
     super(props);
@@ -45,6 +49,7 @@ class UIShell extends Component {
 
   onPatternSelection = label => {
     this.setState({ patternName: label });
+    console.log(label)
   };
 
   renderSideNavItems = () => {

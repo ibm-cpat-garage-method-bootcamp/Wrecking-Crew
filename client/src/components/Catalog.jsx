@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import {
     StructuredListWrapper,
     StructuredListRow,
@@ -24,11 +24,9 @@ class Catalog extends Component {
                 return 1
             }
             return 0;
-
         });
 
         this.state = {
-            selectedRow: 0,
             catalogItems: sortedCatalogItems
         }
     }
