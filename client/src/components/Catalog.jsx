@@ -15,15 +15,23 @@ import { Popover, Table, TableBody, TableRow, TableCell, TableHead } from "@mate
 
 function ExpandedViewModal(props){
     const {expandedEl, expandedElObj,closeExpandedView} = props;
-    React.useEffect(()=>{
-        console.log(expandedElObj)
-    },[expandedEl])
+
     return <Popover 
             open={!!expandedEl}
             onClose={closeExpandedView}
             anchorEl={expandedEl}
             >
-          <div id="simple-modal-description" style={{width:'400px', height:'400px'}}>
+          <div 
+            id="simple-modal-description" 
+            style={{width:'400px', 
+                height:'400px',     
+                display:'flex', 
+                flexDirection:'column',
+                justifyContent:'space-between', 
+                alignItems:'center'}}
+
+            data-testid='catalog-item-expanded-view'
+          >
             <Table>
                 <TableHead>
                     <TableCell>
@@ -47,7 +55,7 @@ function ExpandedViewModal(props){
                     </TableRow>)}
                 </TableBody>
             </Table>
-            <Button onClick = { closeExpandedView} style = {{width: '200px', height: '50px'}}>
+            <Button onClick = { closeExpandedView} style = {{width: '100%', height: '50px', maxWidth:'none'}}>
                 Close
             </Button>
           </div>
@@ -78,18 +86,33 @@ class Catalog extends Component {
         }
     }
 
-    onRowClick = (id , e)=> {
+    onAddItemToggle = (id , e)=> {
         let catalogItem = this.state.catalogItems[id];
         let newCatalogItems = this.state.catalogItems;
         newCatalogItems[id] = {...catalogItem, outOfStock: !catalogItem.outOfStock};
-
         this.setState({catalogItems: newCatalogItems});
         console.log('Added to shopping list')
     };
 
+    openExpandedItem = (e, expandedElId)=>{
+        const expandedEl = e.target;
+        const expandedElObj = this.state.catalogItems[expandedElId];
+        this.setState({expandedEl, expandedElObj})
+    }
+
     renderRow = (row, id) => {
         return (
-            <StructuredListRow data-testid='catalog-list-item' key={row.id} >
+            <StructuredListRow 
+                data-testid='catalog-list-item'
+                id="catalog-list-item"
+                key={row.id} 
+                onClick={(e)=>{
+                    if([e.target.parentElement.id, e.target.id].includes("catalog-list-item")){    
+                        this.openExpandedItem(e, id)
+                    }
+                  }
+                }
+                >
                 <div>
                     <StructuredListInput
                         id={`row-${row.id}`}
@@ -99,17 +122,26 @@ class Catalog extends Component {
                         //defaultChecked={this.state.selectedRow === id}
                         checked={row.outOfStock}
                     />
-                    <StructuredListCell>
-                        <Toggle data-testid='catalog-list-item-out' toggled={row.outOfStock} onClick={(e) => this.onRowClick(id,e)}/>
+                    <StructuredListCell
+                    >
+                        <Toggle 
+                          data-testid='catalog-list-item-out' 
+                          toggled={row.outOfStock} 
+                          onChange={(e) => {
+                              this.onAddItemToggle(id,e);
+                            }}
+                          labelA=""
+                          labelB=""
+                        />
                     </StructuredListCell>
                 </div>
-                <StructuredListCell className="simple-list-row" onClick={(e)=>this.openExpandedItem(e, id)}>
+                <StructuredListCell className="simple-list-row" >
                     {row.name}
                 </StructuredListCell>
-                <StructuredListCell className="simple-list-row" onClick={(e)=>this.openExpandedItem(e, id)}>
+                <StructuredListCell className="simple-list-row" >
                     {row.comment}
                 </StructuredListCell>
-                <StructuredListCell className="simple-list-row" onClick={(e)=>this.openExpandedItem(e, id)}>
+                <StructuredListCell className="simple-list-row" >
                     {row['size/weight']}
                 </StructuredListCell>
                 <StructuredListCell/>
@@ -117,11 +149,6 @@ class Catalog extends Component {
         );
     };
 
-    openExpandedItem = (e, expandedElId)=>{
-        const expandedEl = e.target;
-        const expandedElObj = this.state.catalogItems[expandedElId];
-        this.setState({expandedEl, expandedElObj})
-    }
 
     render() {
         return (

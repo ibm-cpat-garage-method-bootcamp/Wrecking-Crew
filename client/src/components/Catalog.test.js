@@ -30,7 +30,7 @@ describe('CatalogList', ()=>{
         const catalogListItems = queryAllByTestId('catalog-list-item')
         for(const catalogItem of catalogListItems){
             fireEvent.click(catalogItem);
-            const expandedView = getAllByTestId('catalog-item-expanded-view');
+            getAllByTestId('catalog-item-expanded-view');
         }
         done()
     })
