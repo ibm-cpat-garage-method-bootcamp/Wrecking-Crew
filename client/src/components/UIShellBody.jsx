@@ -15,7 +15,13 @@ class UIShellBody extends Component {
         quantity:7,
         comment:"RIPE PLEASE",
         outOfStock: false,
-        id: 0
+        id: 0,
+        'store/aisle':[
+          {
+            store:'Publix North',
+            aisle:'1'
+          }
+        ]
       },
       {
         name:'Apple',
@@ -23,7 +29,13 @@ class UIShellBody extends Component {
         quantity:7,
         comment:"RIPE PLEASE",
         outOfStock: true,
-        id: 1
+        id: 1,
+        'store/aisle':[
+          {
+            store:'Publix Central',
+            aisle:'10'
+          }
+        ]
       },
       {
         name:'Eggs',
@@ -31,7 +43,13 @@ class UIShellBody extends Component {
         quantity:7,
         comment:"AA Grade Only",
         outOfStock: true,
-        id: 2
+        id: 2,
+        'store/aisle':[
+          {
+            store:'Publix South',
+            aisle:'4'
+          }
+        ]
       }
     ];
     const defaultShoppingListItems = [

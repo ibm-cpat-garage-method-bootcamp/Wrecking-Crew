@@ -41,4 +41,13 @@ describe('CatalogList', ()=>{
         const listItems = queryAllByTestId('catalog-list-item')
         expect(listItems.length).toEqual(0)
     })
+    test('Clicking on an item will open the expanded view', (done)=>{
+        const {queryAllByTestId, getAllByTestId} = render(<Catalog catalogItems={items} />)
+        const catalogListItems = queryAllByTestId('catalog-list-item')
+        for(const catalogItem of catalogListItems){
+            fireEvent.click(catalogItem);
+            getAllByTestId('catalog-item-expanded-view');
+        }
+        done()
+    })
 });
