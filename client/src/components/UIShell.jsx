@@ -38,7 +38,7 @@ const Fade20 = () => (
 class UIShell extends Component {
   header = "Menu Header";
   menuTitle = "Menu Title";
-  menuItems = ["Catalog List", "Shopping List"];
+  menuItems = ["Catalog", "Shopping List", "New Catalog Item Form"];
 
   constructor(props) {
     super(props);
@@ -79,17 +79,11 @@ class UIShell extends Component {
         </Header>
         <SideNav aria-label="Side navigation">
           <SideNavItems>
-            <SideNavMenu
-              defaultExpanded
-              icon={<Fade20 />}
-              title={this.menuTitle}
-            >
-              {this.renderSideNavItems()}
-            </SideNavMenu>
+            {this.renderSideNavItems()}
           </SideNavItems>
         </SideNav>
         <Content id="main-content">
-          <UIShellBody patternName={this.state.patternName} />
+          <UIShellBody currentList={this.state.patternName} />
         </Content>
       </div>
     );

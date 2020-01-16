@@ -73,7 +73,7 @@ class UIShellBody extends Component {
   }
   components = {
     "Simple List": SimpleList,
-    "Catalog List": Catalog,
+    "Catalog": Catalog,
     "Shopping List": ShoppingList,
     "New Catalog Item Form":NewCatalogItemForm
   };
@@ -85,11 +85,12 @@ class UIShellBody extends Component {
   }
 
   render() {
+    const CurrentList = this.components[this.props.currentList];
     let curScreen = this.defaultComponent;
     const PatternName = this.components[curScreen];
     return (
       <div className="pattern-container">
-        <PatternName
+        <CurrentList
           showDescription={true}
           shoppingListItems={this.state.shoppingListItems} 
           catalogItems={this.state.catalogItems}
