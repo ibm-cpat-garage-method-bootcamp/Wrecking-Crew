@@ -81,7 +81,7 @@ function UpdateForm (props) {
       defaultValue:[]
     }
   ];
-  const requiredFields = ["name"];
+  const requiredFields = ["name", "store/aisle"];
 
   const defaultItem = fields.reduce((obj, field)=>({
     ...obj, 
@@ -89,7 +89,15 @@ function UpdateForm (props) {
   }),{})
 
   const isFieldInvalid = (field, fieldValue)=>{
-    return !fieldValue && requiredFields.includes(field)
+    if(typeof fieldValue !== 'object'){
+      return !fieldValue && requiredFields.includes(field)
+    }else if(Array.isArray(fieldValue)){
+      return fieldValue.reduce((isInvalid,arrayItem)=>{
+        return isFieldInvalid(field, arrayItem) || isInvalid
+      }, false);
+    }else{
+      return isFieldInvalid(field, Object.values(fieldValue))
+    }
   }
 
   const [newItem, setNewItem] = React.useState(defaultItem)
