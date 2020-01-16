@@ -11,6 +11,55 @@ import "../pattern-components/patterns.scss";
 
 let checkFlag = true;
 
+function StoreAisleInputs(props){
+  const {onChange, value} = props;
+
+  return <>
+    {  value.map((storeAislePair, idx, storeAisleArray)=>(
+        <div style={{display:'flex', width:'100%'}}>
+        <TextInput
+        id={'store'}
+        name={'store'}
+        value={storeAislePair.store}
+        onChange={(e)=>{
+        const newValue = [...storeAisleArray];
+        newValue.splice(idx, 1, {store:e.target.value, aisle:storeAislePair.aisle})
+        onChange('store/aisle',newValue)
+        }}
+        labelText={'store'}
+        maxLength="100"
+        // invalid={newItem.storeInvalid}
+        invalidText={`Please enter a valid store...`}
+        data-testid={`input-store`}
+      />
+      &nbsp;
+      &nbsp;
+      <TextInput
+      id={'aisle'}
+      name={'aisle'}
+        value={storeAislePair.aisle}
+      onChange={(e)=>{
+        const newValue = [...storeAisleArray];
+        newValue.splice(idx, 1, {aisle:e.target.value, store:storeAislePair.store})
+        onChange('store/aisle',newValue)
+        }}
+      labelText={'aisle'}
+      maxLength="100"
+      // invalid={newItem.storeInvalid}
+      invalidText={`Please enter a valid aisle...`}
+      data-testid={`input-aisle`}
+      /> 
+      </div>
+    ))}
+    <div style={{display:'flex'}}>
+      <Button onClick={()=>onChange('store/aisle', value.concat([{store:'', aisle:''}]))}>Add Store</Button>
+        &nbsp;
+        &nbsp;
+      <Button onClick={()=>onChange('store/aisle', value.slice(0,-1))}>Remove Store</Button>
+    </div>
+</>
+}
+
 function UpdateForm (props) {
   const {catalogItems, addCatalogItem} = props;
   const fields = [
@@ -22,16 +71,21 @@ function UpdateForm (props) {
       name:"size/weight",
       type:"text"
     },
-   {
+    {
      name:"comment",
      type:"text"
+    },
+    {
+      name:"store/aisle",
+      CustomComponent:StoreAisleInputs,
+      defaultValue:[]
     }
   ];
   const requiredFields = ["name"];
 
   const defaultItem = fields.reduce((obj, field)=>({
     ...obj, 
-    [field.name]:''
+    [field.name]:field.defaultValue||''
   }),{})
 
   const isFieldInvalid = (field, fieldValue)=>{
@@ -40,17 +94,15 @@ function UpdateForm (props) {
 
   const [newItem, setNewItem] = React.useState(defaultItem)
 
-  const saveData = event => {
-    const target = event.target;
-    let fieldName = target.name;
-    let fieldValue = target.value;
-      setNewItem((prev)=>(
-          {
-            ...prev, 
-            [fieldName]: fieldValue, 
-            [fieldName + "Invalid"]: isFieldInvalid(fieldName, fieldValue) 
-          }
-        )
+  const saveData = (fieldName, fieldValue) => {
+      setNewItem((prev)=>{
+        const newItemValue = {
+          ...prev, 
+          [fieldName]: fieldValue, 
+          [fieldName + "Invalid"]: isFieldInvalid(fieldName, fieldValue) 
+        };
+        return newItemValue
+        }
       );
   };
 
@@ -92,24 +144,25 @@ function UpdateForm (props) {
           <div className="bx--col-xs-12">
             <Tile>
               <Form>
-                {fields.map(field=>(
-                  field.type==="text"?
+                {fields.map(field=>{
+                  const {CustomComponent} = field
+                  return field.type==="text"?
                   <TextInput
                     id={field.name}
                     name={field.name}
                     value={newItem[field.name] || ""}
-                    onChange={saveData}
+                    onChange={(e)=>saveData(field.name, e.target.value)}
                     labelText={field.name}
                     maxLength="100"
                     invalid={newItem[`${field.name}Invalid`]}
                     invalidText={`Please enter a ${field.name}..`}
                     data-testid={`input-${field.name}`}
-                  />:null
-                ))}
+                  />:<CustomComponent onChange={saveData} value={newItem[field.name]}/>
+                })}
                 <br />
                 <br />
                 <div className="left-align">
-                  <Button onClick={saveForm} data-testid="add-catalog-item-button">Add</Button>
+                  <Button onClick={saveForm} data-testid="add-catalog-item-button">Add Catalog Item</Button>
                 </div>
               </Form>
             </Tile>

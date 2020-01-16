@@ -17,7 +17,7 @@ describe('Shopping list', ()=>{
         const nameInput = getByTestId('input-name');
         fireEvent.change(nameInput,{target:{value:"orange juice"}})
         fireEvent.click(addCatalogItemButton, {button:0});
-        expect(addedItem).toEqual({name:'orange juice', 'size/weight':"", comment:""})
+        expect(addedItem).toEqual({name:'orange juice', 'size/weight':"", comment:"", 'store/aisle':[]})
         wait(done, {timeout:1000})
     })
     test('That the user cannot add a duplicate item', (done)=>{
