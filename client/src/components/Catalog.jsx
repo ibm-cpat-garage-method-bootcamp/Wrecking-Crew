@@ -37,7 +37,7 @@ class Catalog extends Component {
         newCatalogItems[id] = {...catalogItem, outOfStock: !catalogItem.outOfStock};
 
         this.setState({catalogItems: newCatalogItems});
-        console.log('Catalog List Updated')
+        console.log('Added to shopping list')
     };
 
     renderRow = (row, id) => {
