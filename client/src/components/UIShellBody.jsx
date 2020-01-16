@@ -18,7 +18,7 @@ class UIShellBody extends Component {
         id: 0
       },
       {
-        name:'Apples',
+        name:'Apple',
         'size/weight':'large',
         quantity:7,
         comment:"RIPE PLEASE",
@@ -70,6 +70,7 @@ class UIShellBody extends Component {
       catalogItems:defaultCatalogItems,
       shoppingListItems:defaultShoppingListItems
     }; 
+    //this.changeParentState = this.changeParentState.bind(this)
   }
   components = {
     "Simple List": SimpleList,
@@ -84,6 +85,10 @@ class UIShellBody extends Component {
     console.log('New item submitted successfully!', item)
   }
 
+  changeParentState = (state) =>{
+    this.setState(state)
+  }
+
   render() {
     const CurrentList = this.components[this.props.currentList];
     let curScreen = this.defaultComponent;
@@ -94,7 +99,9 @@ class UIShellBody extends Component {
           showDescription={true}
           shoppingListItems={this.state.shoppingListItems} 
           catalogItems={this.state.catalogItems}
+          parentState= {this.changeParentState.bind(this)}
           addCatalogItem={this.addCatalogItem}/>
+          
       </div>
     );
   }

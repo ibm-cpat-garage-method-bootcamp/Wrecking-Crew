@@ -5,7 +5,8 @@ import {
     StructuredListCell,
     StructuredListBody,
     StructuredListInput,
-    Toggle
+    Toggle,
+    Button
 } from "carbon-components-react";
 import Header from "../pattern-components/Header";
 import "../pattern-components/patterns.scss";
@@ -31,6 +32,8 @@ class Catalog extends Component {
         }
     }
 
+
+
     onRowClick = id => {
         let catalogItem = this.state.catalogItems[id];
         let newCatalogItems = this.state.catalogItems;
@@ -39,6 +42,32 @@ class Catalog extends Component {
         this.setState({catalogItems: newCatalogItems});
         console.log('Added to shopping list')
     };
+
+    deleteButtonClick = (name) => {
+    
+        name = name.toLowerCase()
+        
+        let catalogItems = this.state.catalogItems.filter((item)=>{
+          
+            return item.name.toLowerCase() !== name
+        })
+
+        let shoppingListItems = this.props.shoppingListItems.filter((item)=>{
+            
+            return item.name.toLowerCase() !== name
+        })
+
+            
+        this.props.parentState({
+            catalogItems: catalogItems,
+            shoppingListItems:shoppingListItems
+        })
+
+            this.setState({
+                catalogItems: catalogItems
+            })
+    }
+
 
     renderRow = (row, id) => {
         return (
@@ -64,6 +93,9 @@ class Catalog extends Component {
                 </StructuredListCell>
                 <StructuredListCell className="simple-list-row">
                     {row['size/weight']}
+                </StructuredListCell>
+                <StructuredListCell className="simple-list-row">
+                    <Button data-testid="remove-catalog-item" kind="danger" onClick={()=>this.deleteButtonClick(row.name)} > Remove </Button>
                 </StructuredListCell>
                 <StructuredListCell/>
             </StructuredListRow>
