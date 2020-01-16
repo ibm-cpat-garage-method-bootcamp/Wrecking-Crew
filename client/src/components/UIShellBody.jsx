@@ -14,21 +14,24 @@ class UIShellBody extends Component {
         'size/weight':'large',
         quantity:7,
         comment:"RIPE PLEASE",
-        outOfStock: false
+        outOfStock: false,
+        id: 0
       },
       {
         name:'Apples',
         'size/weight':'large',
         quantity:7,
         comment:"RIPE PLEASE",
-        outOfStock: true
+        outOfStock: true,
+        id: 1
       },
       {
         name:'Eggs',
         'size/weight':'large',
         quantity:7,
         comment:"AA Grade Only",
-        outOfStock: true
+        outOfStock: true,
+        id: 2
       }
     ];
     const defaultShoppingListItems = [

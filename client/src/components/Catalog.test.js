@@ -10,7 +10,7 @@ describe('CatalogList', ()=>{
         {name: 'Banana', comment: 'delicious', 'size/weight': 'Large', outOfStock: false},
         {name: 'Banana', comment: 'delicious', 'size/weight': 'Large', outOfStock: true},
         {name: 'Banana', comment: 'delicious', 'size/weight': 'Large', outOfStock: false},
-        {name: 'Banana', comment: 'delicious', 'size/weight': 'Large', outOfStock: true}];
+        {name: 'Banana', comment: 'delicious', 'size/weight': 'Large', outOfStock: false}];
 
     test('The Catalog List will contain 6 items', ()=>{
 
@@ -19,11 +19,10 @@ describe('CatalogList', ()=>{
         expect(catalogListItems.length).toEqual(6)
     })
 
-    test('The Catalog List will contain 3 items that need to be added to the shopping list', ()=>{
+    test('The Catalog List will contain 2 items that need to be added to the shopping list/not in stock', ()=>{
         const {queryAllByTestId} = render(<Catalog catalogItems={items}/>)
         const outOfStockItems = queryAllByTestId('catalog-list-item-out').filter(item => item.checked);
-        expect(outOfStockItems.length).toEqual(3)
+        expect(outOfStockItems.length).toEqual(2)
 
     })
-
 });

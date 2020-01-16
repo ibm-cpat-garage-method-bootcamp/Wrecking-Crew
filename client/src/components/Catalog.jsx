@@ -1,37 +1,53 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import {
     StructuredListWrapper,
     StructuredListRow,
     StructuredListCell,
-    StructuredListHead,
     StructuredListBody,
     StructuredListInput,
-    Icon,
     Toggle
 } from "carbon-components-react";
-import { iconCheckmarkSolid } from "carbon-icons";
 import Header from "../pattern-components/Header";
 import "../pattern-components/patterns.scss";
 
 class Catalog extends Component {
     constructor(props) {
         super(props);
+        let sortedCatalogItems = props.catalogItems.sort((a, b)=>{
+            let item1 = a.name;
+            let item2 = b.name;
+
+            if (item1 < item2) {
+                return -1
+            }
+            if (item1 > item2){
+                return 1
+            }
+            return 0;
+
+        });
+
         this.state = {
             selectedRow: 0,
-            catalogItems: props.catalogItems
-        };
+            catalogItems: sortedCatalogItems
+        }
     }
 
     onRowClick = id => {
-        this.setState({ selectedRow: id });
+        let catalogItem = this.state.catalogItems[id];
+        let newCatalogItems = this.state.catalogItems;
+        newCatalogItems[id] = {...catalogItem, outOfStock: !catalogItem.outOfStock};
+
+        this.setState({catalogItems: newCatalogItems});
+        console.log('Catalog List Updated')
     };
 
     renderRow = (row, id) => {
         return (
-            <StructuredListRow data-testid='catalog-list-item' key={id} onClick={() => this.onRowClick(id)}>
+            <StructuredListRow data-testid='catalog-list-item' key={row.id}>
                 <div>
                     <StructuredListInput
-                        id={`row-${id}`}
+                        id={`row-${row.id}`}
                         value="row-0"
                         title="row-0"
                         name="row-0"
@@ -39,7 +55,7 @@ class Catalog extends Component {
                         checked={row.outOfStock}
                     />
                     <StructuredListCell>
-                        <Toggle data-testid='catalog-list-item-out' toggled={row.outOfStock}/>
+                        <Toggle data-testid='catalog-list-item-out' toggled={row.outOfStock} onClick={() => this.onRowClick(id)}/>
                     </StructuredListCell>
                 </div>
                 <StructuredListCell className="simple-list-row">
@@ -57,19 +73,6 @@ class Catalog extends Component {
     };
 
     render() {
-        let data = this.state.catalogItems.sort((a, b)=>{
-                let item1 = a.name;
-                let item2 = b.name;
-
-                if (item1 < item2) {
-                    return -1
-                }
-                if (item1 > item2){
-                    return 1
-                }
-                return 0;
-
-        });
         return (
             <div className="bx--grid pattern-container">
                 <Header
@@ -92,7 +95,7 @@ class Catalog extends Component {
                                 </StructuredListCell>
                             </StructuredListRow>
                             <StructuredListBody>
-                                {data.map((row, i) => {
+                                {this.state.catalogItems.map((row, i) => {
                                     return this.renderRow(row, i);
                                 })}
                             </StructuredListBody>
