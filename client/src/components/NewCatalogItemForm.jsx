@@ -8,6 +8,7 @@ import {
 } from "carbon-components-react";
 import Header from "../pattern-components/Header";
 import "../pattern-components/patterns.scss";
+import { getCatalogItems, addCatalogItem } from "../util/api";
 
 let checkFlag = true;
 
@@ -61,7 +62,14 @@ function StoreAisleInputs(props){
 }
 
 function UpdateForm (props) {
-  const {catalogItems, addCatalogItem} = props;
+  const [catalogItems, setCatalogItems]=React.useState([])
+
+  React.useEffect(()=>{
+    getCatalogItems().then(catalogItems=>{
+      setCatalogItems(catalogItems)
+    })
+  },[])
+
   const fields = [
     {
       name:"name",
@@ -86,7 +94,7 @@ function UpdateForm (props) {
   const defaultItem = fields.reduce((obj, field)=>({
     ...obj, 
     [field.name]:field.defaultValue||''
-  }),{})
+  }), {})
 
   const isFieldInvalid = (field, fieldValue)=>{
     if(typeof fieldValue !== 'object'){
@@ -126,7 +134,7 @@ function UpdateForm (props) {
     return checkFlag;
   };
 
-  const saveForm = event => {
+  const saveForm = async event => {
     event.preventDefault();
     if (checkForm()) {
       const itemToAdd = fields.reduce((obj, field)=>({
@@ -139,7 +147,9 @@ function UpdateForm (props) {
       return;
     }
       setNewItem(defaultItem);
-      addCatalogItem(itemToAdd);
+      const updatedCatalogItems = await addCatalogItem(itemToAdd);
+      setCatalogItems(updatedCatalogItems)
+      console.log('New item submitted successfully!', itemToAdd)
     }
   };
 

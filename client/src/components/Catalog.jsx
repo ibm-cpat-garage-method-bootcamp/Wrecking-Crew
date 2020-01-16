@@ -10,8 +10,9 @@ import {
 } from "carbon-components-react";
 import Header from "../pattern-components/Header";
 import "../pattern-components/patterns.scss";
-import Modal from '@material-ui/core/Modal';
 import { Popover, Table, TableBody, TableRow, TableCell, TableHead } from "@material-ui/core";
+import { getCatalogItems } from "../util/api";
+import * as _ from 'lodash';
 
 function ExpandedViewModal(props){
     const {expandedEl, expandedElObj,closeExpandedView} = props;
@@ -66,24 +67,18 @@ function ExpandedViewModal(props){
 class Catalog extends Component {
     constructor(props) {
         super(props);
-        let sortedCatalogItems = props.catalogItems.sort((a, b)=>{
-            let item1 = a.name;
-            let item2 = b.name;
-
-            if (item1 < item2) {
-                return -1
-            }
-            if (item1 > item2){
-                return 1
-            }
-            return 0;
-        });
 
         this.state = {
-            catalogItems: sortedCatalogItems,
+            catalogItems: [],
             expandedEl: '',
             expandedElObj:null
         }
+    }
+
+    async componentDidMount(){
+       const unsortedCatalogItems = await getCatalogItems();
+        let catalogItems = _.sortBy(unsortedCatalogItems, obj=>obj.name.toLowerCase());
+       this.setState({catalogItems});
     }
 
     onAddItemToggle = (id , e)=> {
