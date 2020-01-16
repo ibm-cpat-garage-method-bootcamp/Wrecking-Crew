@@ -56,7 +56,10 @@ function ExpandedViewModal(props){
                     </TableRow>)}
                 </TableBody>
             </Table>
-            <Button onClick = { closeExpandedView} style = {{width: '100%', height: '50px', maxWidth:'none'}}>
+            <Button 
+                onClick = { closeExpandedView} style = {{width: '100%', height: '50px', maxWidth:'none'}} 
+                data-testid="close-expanded-view"
+            >
                 Close
             </Button>
           </div>
