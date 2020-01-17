@@ -89,6 +89,17 @@ async function getShoppingListItems(){
   } 
     return defaultShoppingListItems;
 }
+
+async function removeShoppingListItem(item){
+    let currentShoppingList = [];
+    if(window.localStorage.getItem('catalogItems')){
+        currentShoppingList = JSON.parse(window.localStorage.getItem('catalogItems'))
+    } else {currentShoppingList = defaultShoppingListItems}
+
+    const newShoppingList = currentShoppingList.filter(toDeleteItem => toDeleteItem.name.toLowerCase() !== item);
+    window.localStorage.setItem('shoppingListItems', JSON.stringify([...newShoppingList]))
+}
+
 async function getCatalogItems(){
   if(window.localStorage.getItem('catalogItems')) {
     return JSON.parse(window.localStorage.getItem('catalogItems'));
@@ -101,8 +112,21 @@ async function addCatalogItem(item){
   return currentCatalogItems.concat([item])
 }
 
+async function removeCatalogItem(item) {
+    let currentCatalogItems = [];
+    if(window.localStorage.getItem('catalogItems')){
+        currentCatalogItems = JSON.parse(window.localStorage.getItem('catalogItems'))
+    } else {currentCatalogItems = defaultCatalogItems}
+
+    const newCatalogItems = currentCatalogItems.filter(toDeleteItem => toDeleteItem.name.toLowerCase() !== item);
+    await removeShoppingListItem(item);
+    window.localStorage.setItem('catalogItems', JSON.stringify([...newCatalogItems]))
+}
+
 export {
     getShoppingListItems,
     getCatalogItems,
-    addCatalogItem
+    addCatalogItem,
+    removeShoppingListItem,
+    removeCatalogItem
 }

@@ -11,7 +11,7 @@ import {
 import Header from "../pattern-components/Header";
 import "../pattern-components/patterns.scss";
 import { Popover, Table, TableBody, TableRow, TableCell, TableHead } from "@material-ui/core";
-import { getCatalogItems } from "../util/api";
+import { getCatalogItems, removeShoppingListItem, removeCatalogItem } from "../util/api";
 import * as _ from 'lodash';
 
 function ExpandedViewModal(props){
@@ -89,30 +89,19 @@ class Catalog extends Component {
         console.log('Added to shopping list')
     };
 
-    deleteButtonClick = (name) => {
+    onDeleteCatalogItemToggle = async (name) => {
     
-        name = name.toLowerCase()
-        
-        let catalogItems = this.state.catalogItems.filter((item)=>{
-          
-            return item.name.toLowerCase() !== name
-        })
+        name = name.toLowerCase();
 
-        let shoppingListItems = this.props.shoppingListItems.filter((item)=>{
-            
-            return item.name.toLowerCase() !== name
-        })
+        await removeCatalogItem(name);
+        await removeShoppingListItem(name);
 
-            
-        this.props.parentState({
-            catalogItems: catalogItems,
-            shoppingListItems:shoppingListItems
-        })
+        const catalogItems = await getCatalogItems()
 
-            this.setState({
-                catalogItems: catalogItems
-            })
-    }
+        this.setState({
+            catalogItems: catalogItems
+        })
+    };
 
 
     openExpandedItem = (e, expandedElId)=>{
@@ -166,7 +155,7 @@ class Catalog extends Component {
                     {row['size/weight']}
                 </StructuredListCell>
                 <StructuredListCell className="simple-list-row">
-                    <Button data-testid="remove-catalog-item" kind="danger" onClick={()=>this.deleteButtonClick(row.name)} > Remove </Button>
+                    <Button data-testid="remove-catalog-item" kind="danger" onClick={()=>this.onDeleteCatalogItemToggle(row.name)} > Remove </Button>
                 </StructuredListCell>
                 <StructuredListCell/>
             </StructuredListRow>

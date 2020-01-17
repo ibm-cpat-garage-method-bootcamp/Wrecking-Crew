@@ -33,11 +33,10 @@ describe('CatalogList', ()=>{
         expect(deleteButton.length).toEqual(6)
     })
     test("Identifies that the item removed is no longer on the list",()=>{
-        const {queryAllByTestId,debug} = render(<Catalog catalogItems={items} shoppingListItems = {items}/>)
-        const deleteButtons = queryAllByTestId('remove-catalog-item')
-
-        fireEvent.click(deleteButtons[1])
-        debug()
+        const {queryAllByTestId,debug} = render(<Catalog catalogItems={items} shoppingListItems = {items}/>);
+        const deleteButtons = queryAllByTestId('remove-catalog-item');
+        console.log(deleteButtons)
+        fireEvent.click(deleteButtons[0])
         const listItems = queryAllByTestId('catalog-list-item')
         expect(listItems.length).toEqual(0)
     })
