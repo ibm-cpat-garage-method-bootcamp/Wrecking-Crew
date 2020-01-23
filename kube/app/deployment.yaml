@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shopping-list-deployment
+  namespace: wrecking-crew
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: shopping-list
+  template:
+    metadata:
+      labels:
+        app: shopping-list
+    spec:
+      containers:
+      - name: shopping-list-container
+        image: patrickgerspach/shopping-list:v1.0.0
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: CLOUDANT_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: cloudant
+              key: binding
+              

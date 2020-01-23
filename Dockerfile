@@ -1,17 +1,33 @@
-FROM registry.access.redhat.com/ubi8/nodejs-10
+# First stage: compile react client
+FROM node:13.7.0-alpine3.11 AS builder
+RUN mkdir /opt/build-client-stage/
+WORKDIR /opt/build-client-stage
+COPY client/package*.json ./
+ADD client/package.json /opt/build-client-stage/
+RUN npm install 
+COPY client ./
+RUN npm run build
 
-RUN mkdir app
+# Second stage:
+# base image
+FROM node:13.7.0-alpine3.11
 
-# Install npm production packages
-COPY --chown=default:root . ./app
+# set working directory
+RUN mkdir -p /opt/wrecking-crew/client/build
+WORKDIR /opt/wrecking-crew
 
-ENV NODE_ENV production
-ENV PORT 3000
+# install and cache app dependencies
+COPY package*.json ./
+COPY server/ ./server/
+COPY --from=builder /opt/build-client-stage/build ./client/build
 
-EXPOSE 3000/tcp
+RUN npm install
 
-WORKDIR ./app
+# specify port
+EXPOSE 8080
 
-RUN npm install --production
+# start app
+CMD ["node", "server/server.js"]
 
-CMD ["npm", "start"]
+# run as non-root user
+USER node

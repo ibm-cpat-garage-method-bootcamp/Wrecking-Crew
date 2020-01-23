@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: shopping-list-service
+  labels:
+    app: shopping-list-service
+  namespace: wrecking-crew
+spec:
+  selector:
+    app: shopping-list
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: NodePort
