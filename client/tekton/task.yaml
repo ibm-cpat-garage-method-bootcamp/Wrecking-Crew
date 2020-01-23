@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: run-test-on-client
+spec:
+  inputs:
+    resources:
+      - name: git-repo-shopping-list
+        type: git
+  steps:
+    - name: install-global-packages
+      image: node
+      command:
+        - /bin/sh
+        - -c
+      args:
+        - npm install
+      workingDir: /workspace/git-repo-shopping-list
+
+    - name: client-install-packages
+      image: node
+      command:
+        - /bin/sh
+        - -c
+      args:
+        - npm install
+      workingDir: /workspace/git-repo-shopping-list/client
+
+    - name: test
+      image: node
+      command:
+        - /bin/sh
+        - -c
+      args:
+        - npm test
+      workingDir: /workspace/git-repo-shopping-list/client
