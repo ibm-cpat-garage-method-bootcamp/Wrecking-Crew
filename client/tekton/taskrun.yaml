@@ -9,5 +9,10 @@ spec:
       - name: git-repo-shopping-list
         resourceRef:
           name: git-repo-shopping-list
+  outputs:
+    resources:
+      - name: shopping-list-docker-image
+        resourceRef:
+          name: shopping-list-docker-image
   taskRef:
     name: run-test-on-client

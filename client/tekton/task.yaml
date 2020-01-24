@@ -7,6 +7,20 @@ spec:
     resources:
       - name: git-repo-shopping-list
         type: git
+    params:
+      - name: pathToDockerFile
+        type: string
+        description: The path to client Dockerfile
+        default: /workspace/git-repo-shopping-list/Dockerfile
+      - name: pathToContext
+        type: string
+        description: The path to context
+        default: /workspace/git-repo-shopping-list
+
+  outputs:
+    resources:
+      - name: shopping-list-docker-image
+        type: image
   steps:
     - name: install-global-packages
       image: node
@@ -17,7 +31,7 @@ spec:
         - npm install
       workingDir: /workspace/git-repo-shopping-list
 
-    - name: client-install-packages
+    - name: install-client-packages
       image: node
       command:
         - /bin/sh
@@ -34,3 +48,15 @@ spec:
       args:
         - npm test
       workingDir: /workspace/git-repo-shopping-list/client
+
+    - name: build-push-docker
+      image: gcr.io/kaniko-project/executor:v0.15.0
+      env:
+        - name: "DOCKER_CONFIG"
+          value: "/tekton/home/.docker/"
+      command:
+        - /kaniko/executor
+      args:
+        - --dockerfile=/workspace/git-repo-shopping-list/Dockerfile
+        - --destination=$(outputs.resources.shopping-list-docker-image.url)
+        - --context=$(inputs.params.pathToContext)

@@ -1,9 +1,9 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: skaffold-image-leeroy-web
+  name: shopping-list-docker-image
 spec:
   type: image
   params:
     - name: url
-      value: index.docker.io/johnnyx/cloudnative_sample_app
+      value: index.docker.io/patrickgerspach/shopping-list:v1.0.0
