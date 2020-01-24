@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TaskRun
+metadata:
+  name: run-test-on-client-task-run
+spec:
+  serviceAccountName: testing-service
+  inputs:
+    resources:
+      - name: git-repo-shopping-list
+        resourceRef:
+          name: git-repo-shopping-list
+  outputs:
+    resources:
+      - name: shopping-list-docker-image
+        resourceRef:
+          name: shopping-list-docker-image
+  taskRef:
+    name: run-test-on-client
